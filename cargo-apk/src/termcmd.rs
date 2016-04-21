@@ -71,7 +71,7 @@ impl TermCmd {
         let mut t = term::stdout().unwrap();
 
         t.fg(term::color::BRIGHT_GREEN).unwrap();
-        t.attr(term::Attr::Bold).unwrap();
+        t.attr(term::Attr::Bold).unwrap_or(());
         writeln!(t, "  Cargo-Apk: {}", self.label).unwrap();
         t.reset().unwrap();
 
