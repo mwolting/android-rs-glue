@@ -133,8 +133,8 @@ pub fn build(manifest_path: &Path, config: &Config) -> BuildResult {
         };
 
         // Create android cpu abi name
-        let abi = if build_target.starts_with("arm") { "armeabi" }
-                  // TODO: armeabi-v7a
+        let abi = if build_target.starts_with("armv7") { "armeabi-v7a" }
+                  else if build_target.starts_with("arm") { "armeabi" }
                   else if build_target.starts_with("aarch64") { "arm64-v8a" }
                   else if build_target.starts_with("i") { "x86" }
                   else if build_target.starts_with("x86_64") { "x86_64" }
@@ -201,6 +201,7 @@ pub fn build(manifest_path: &Path, config: &Config) -> BuildResult {
             .arg("-C").arg(format!("linker={}", android_artifacts_dir.join(if cfg!(target_os = "windows") { "linker_exe.exe" } else { "linker_exe" })
                                                                      .to_string_lossy()))
             .arg("--extern").arg(format!("cargo_apk_injected_glue={}", injected_glue_lib.to_string_lossy()))
+            .arg("-L").arg(injected_glue_lib.parent().unwrap().to_string_lossy().into_owned())
             .inherit_stdouterr()
             .env("CARGO_APK_GCC", gcc_path.as_os_str())
             .env("CARGO_APK_GCC_SYSROOT", gcc_sysroot.as_os_str())

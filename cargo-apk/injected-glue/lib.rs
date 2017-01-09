@@ -156,6 +156,10 @@ fn is_app_thread_terminated() -> (bool, bool) {
     }
 }
 
+pub unsafe fn cargo_apk_injected_glue_get_app() -> *mut ffi::android_app {
+    ANDROID_APP
+}
+
 /// Return a reference to the application structure.
 pub fn get_app<'a>() -> &'a mut ffi::android_app {
     unsafe { &mut *ANDROID_APP }
